@@ -6,3 +6,6 @@ examples/temp_in_celsius.csv
 
 # Ignore Virtualenv
 venv
+
+# Ignore PyCharm project directory
+.idea
