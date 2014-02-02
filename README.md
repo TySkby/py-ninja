@@ -2,6 +2,8 @@
 
 `py-ninja` is a Python wrapper for the [Ninja Blocks](http://ninjablocks.com/) [API](http://docs.ninja.is/). It's still experimental, and should be considered unstable (hence its unpackaged state).
 
+*Note: A _very_ minimal packaging script has been added in this forked version. Not that it's any less experimental than before, but I thought I'd like to use it in other applications. -TySkby*
+
 ## Setup
 
 Install the requirements: `pip install -r requirements.txt`
@@ -127,6 +129,7 @@ There is also a set of unit helpers, including Temperature and Color, in `ninja.
 ## Authors
 
 * [Alec Perkins](http://alecperkins.net)
+* [Tyler Hendrickson](https://github.com/TySkby)
 
 ## License
 
