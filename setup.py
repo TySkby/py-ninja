@@ -1,11 +1,11 @@
-""" Instantiates the API
+from distutils.core import setup
 
-...that's all :)
-"""
-
-from ninja.api import NinjaAPI
-
-from auth import ACCESS_TOKEN
-
-api = NinjaAPI(ACCESS_TOKEN)
-
+setup(
+    name='py-ninja',
+    version='0.1.0',
+    packages=['ninja', 'ninja.nodes'],
+    install_requires=[
+        "requests == 0.14.1",
+        "argparse==1.2.1"
+    ],
+)
