@@ -175,46 +175,26 @@ class RGBLED(Device):
 
 
 class Relay(Device):
-    state = False
-
     def __init__(self, *args, **kwargs):
         super(Relay, self).__init__(*args, **kwargs)
-        last_known_state = self.last_data.get('DA', '0')
-        if last_known_state == '0':
-            self.state = False
-        elif last_known_state == '1':
-            self.state = True
-        else:
-            self.state = None
-
-    def unknown_state_check(self):
-        try:
-            assert self.state is not None
-        except AssertionError:
-            raise Warning('Relay device is in an unknown state!')
 
     @property
-    def is_turned_on(self):
-        self.unknown_state_check()
-        return self.state is True
+    def state(self):
+        while self.data is None:
+            self.heartbeat()
+        return bool(int(self.data))
 
-    @property
-    def is_turned_off(self):
-        self.unknown_state_check()
-        return self.state is False
+    @state.setter
+    def state(self, value):
+        self._change_state(bool(value))
 
     def _change_state(self, logical_state):
-        # Create payload and make PUT request
-        data = {"DA": str(int(logical_state))}
+        """ Changes device's logical state
+        """
+        data = {
+            'DA': str(int(logical_state))
+        }
         self.api._makePUTRequest(self.api.getDeviceURL(self.guid), data)
-        # Wait a moment to make sure the next GET request is up-to-date (sometimes the API lags a bit)
-        state_change_confirmed = False
-        count = 0
-        while state_change_confirmed is False and count < 10:
-            new_info = self.api._makeGETRequest(self.api.DEVICES_URL)['data'][self.guid]
-            state_change_confirmed = int(new_info['last_data']['DA']) is int(logical_state)
-            count += 1
-        self.__init__(self.api, self.guid, info=new_info)
 
     def turn_on(self):
         self._change_state(True)
