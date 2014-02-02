@@ -37,7 +37,6 @@ class Device(Events):
         self.data           = None
         self.last_heartbeat = None
         self.last_read      = None
-        self.last_data      = (info.get('last_data', {}))
 
     def __str__(self):
         return '{device_name} ({class_name})'.format(
@@ -75,7 +74,6 @@ class Device(Events):
             'data',
             'last_heartbeat',
             'last_read',
-            'last_data',
         )
         device_dict = {}
         for field in fields:
