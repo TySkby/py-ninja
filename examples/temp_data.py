@@ -6,13 +6,15 @@ Convenience features:
 - Set tz offset, pulse_interval, and verbosity from command-line arguments
 """
 
-from ninja.devices import TemperatureSensor
 from datetime import timedelta
 
-from setup import *
-from auth import TEMPERATURE_LOGGING_GUID
+from _examples import *
+from ninja.devices import TemperatureSensor
+from ninja.api import NinjaAPI
 
-SENSOR_GUID = TEMPERATURE_LOGGING_GUID
+api = NinjaAPI(secrets.ACCESS_TOKEN)
+
+SENSOR_GUID = secrets.TEMPERATURE_GUID
 
 
 class MyTemperatureSensor(TemperatureSensor):
