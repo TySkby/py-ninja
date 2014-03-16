@@ -201,6 +201,37 @@ class Relay(Device):
         self._change_state(False)
 
 
+class Webcam(Device):
+    def __init__(self, *args, **kwargs):
+        super(Webcam, self).__init__(*args, **kwargs)
+        # Allow override of capture URL (eg. http://user:password@my_ip_cam_address/snapshot.cgi)
+        self._snapshot_url = kwargs.get('capture_url')
+        if self._snapshot_url is None:
+            # Default to Ninja Blocks stream URL for this device
+            self._snapshot_url = self._getNinjaStreamURL()
+
+    def _getNinjaStreamURL(self):
+        return self.api.STREAM_ROOT_URL + self.api.API_VERSION + 'camera/' + self.guid + '/' + 'snapshot'
+
+    @property
+    def snapshot_url(self):
+        return self._snapshot_url
+
+    @snapshot_url.setter
+    def snapshot_url(self, url):
+        self._snapshot_url = url
+
+    def _get_image_data(self):
+        return self.api._makeGETRequest(url=self.snapshot_url, binary=True)
+
+    def capture(self):
+        from .api import NinjaAPIError
+        try:
+            return self._get_image_data()
+        except NinjaAPIError:
+            return None
+
+
 TYPE_MAP = {
     'button': Button,
     'rgbled': RGBLED,
@@ -209,4 +240,5 @@ TYPE_MAP = {
     'humidity': HumiditySensor,
     'light': LightSensor,
     'relay': Relay,
+    'webcam': Webcam,
 }
