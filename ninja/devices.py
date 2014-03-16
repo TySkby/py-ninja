@@ -204,11 +204,8 @@ class Relay(Device):
 class Webcam(Device):
     def __init__(self, *args, **kwargs):
         super(Webcam, self).__init__(*args, **kwargs)
-        # Allow override of snapshot URL (eg. http://user:password@my_ip_cam_address/snapshot.cgi)
-        self._snapshot_url = kwargs.get('snapshot_url')
-        if self._snapshot_url is None:
-            # Default to Ninja Blocks stream URL for this device
-            self._snapshot_url = self._getNinjaStreamURL()
+        # Default to Ninja Blocks stream URL for this device
+        self._snapshot_url = self._getNinjaStreamURL()
 
     def _getNinjaStreamURL(self):
         return self.api.STREAM_ROOT_URL + self.api.API_VERSION + 'camera/' + self.guid + '/' + 'snapshot'
@@ -219,6 +216,7 @@ class Webcam(Device):
 
     @snapshot_url.setter
     def snapshot_url(self, url):
+        # Allow override of snapshot URL (eg. http://user:password@my_ip_cam_address/snapshot.cgi)
         self._snapshot_url = url
 
     def _get_image_data(self):
